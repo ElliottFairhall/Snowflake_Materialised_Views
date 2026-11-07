@@ -4,7 +4,7 @@
 -- Purpose:    Optimize large Materialised Views using clustering keys
 -- =============================================================================
 
-CREATE OR REPLACE MATERIALIZED VIEW analytics.marts.mv_customer_segments
+CREATE OR REPLACE MATERIALIZED VIEW mviews_analytics.marts.mv_customer_segments
 CLUSTER BY (customer_segment)
 AS
 SELECT
@@ -13,5 +13,5 @@ SELECT
     COUNT(*) AS customer_count,
     SUM(lifetime_revenue) AS total_revenue,
     AVG(lifetime_revenue) AS avg_revenue
-FROM analytics.marts.dim_customers
+FROM mviews_analytics.marts.dim_customers
 GROUP BY customer_segment, region;

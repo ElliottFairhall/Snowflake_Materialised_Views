@@ -60,26 +60,26 @@ Key characteristics:
 
 ```sql
 -- Basic Materialised View
-CREATE OR REPLACE MATERIALIZED VIEW analytics.marts.mv_daily_revenue
+CREATE OR REPLACE MATERIALIZED VIEW mviews_analytics.marts.mv_daily_revenue
 AS
 SELECT
     order_date,
     COUNT(*) AS order_count,
     SUM(total_amount) AS total_revenue,
     AVG(total_amount) AS avg_order_value
-FROM analytics.marts.fct_orders
+FROM mviews_analytics.marts.fct_orders
 GROUP BY order_date;
 
 -- Query the Materialised View
 SELECT *
-FROM analytics.marts.mv_daily_revenue
+FROM mviews_analytics.marts.mv_daily_revenue
 WHERE order_date >= '2026-01-01'
 ORDER BY order_date DESC;
 ```
 
 ```sql
 -- Materialised View with clustering for large tables
-CREATE OR REPLACE MATERIALIZED VIEW analytics.marts.mv_customer_segments
+CREATE OR REPLACE MATERIALIZED VIEW mviews_analytics.marts.mv_customer_segments
 CLUSTER BY (customer_segment)
 AS
 SELECT
@@ -88,19 +88,19 @@ SELECT
     COUNT(*) AS customer_count,
     SUM(lifetime_revenue) AS total_revenue,
     AVG(lifetime_revenue) AS avg_revenue
-FROM analytics.marts.dim_customers
+FROM mviews_analytics.marts.dim_customers
 GROUP BY customer_segment, region;
 ```
 
 ```sql
 -- Secure Materialised View (for data sharing)
-CREATE OR REPLACE SECURE MATERIALIZED VIEW analytics.marts.mv_shared_summary
+CREATE OR REPLACE SECURE MATERIALIZED VIEW mviews_analytics.marts.mv_shared_summary
 AS
 SELECT
     region,
     product_category,
     SUM(revenue) AS total_revenue
-FROM analytics.marts.fct_sales
+FROM mviews_analytics.marts.fct_sales
 GROUP BY region, product_category;
 ```
 
@@ -118,10 +118,10 @@ FROM TABLE(INFORMATION_SCHEMA.MATERIALIZED_VIEW_REFRESH_HISTORY(
 ORDER BY start_time DESC;
 
 -- Suspend automatic maintenance
-ALTER MATERIALIZED VIEW analytics.marts.mv_daily_revenue SUSPEND;
+ALTER MATERIALIZED VIEW mviews_analytics.marts.mv_daily_revenue SUSPEND;
 
 -- Resume automatic maintenance
-ALTER MATERIALIZED VIEW analytics.marts.mv_daily_revenue RESUME;
+ALTER MATERIALIZED VIEW mviews_analytics.marts.mv_daily_revenue RESUME;
 ```
 
 ### ⚙️ Limitations and Considerations
